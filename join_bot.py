@@ -13,6 +13,14 @@ intents.message_content = True #intent nonsense
 
 client = discord.Client(intents=intents) #Creates a "client" to handle events that happen when the bot is logged into a server
 
+
+'''Clean up the functionality.. make sure there is a "voice-owner"
+by default, make the first peson who joins vc-owner. Retrieve whether
+a voice-owner is in the chat and identify them.
+
+Implement new voice-channels to be at a specific location, presumably
+the bottom of the "category" of voice-channels the new vc will be in.
+'''
 @client.event
 async def on_ready(): #When the bot logs into discord
 	print(f'We have logged in as {client.user}')
