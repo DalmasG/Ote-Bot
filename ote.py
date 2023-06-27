@@ -1,17 +1,22 @@
 import os
-import discord
-from discord.ext import commands
+import asyncio
+import logging
+
+from discord.ext.commands import Bot
+from discord import Intents
 from dotenv import load_dotenv
 
-load_dotenv()
-intents = discord.Intents.default()
-intents.message_content = True  # Enable the message content intent
+class MyBot(Bot):
 
-bot = commands.Bot(command_prefix=os.getenv('COMMAND_PREFIX'), intents=intents)
+    def __init__(self):
+        load_dotenv()
+        self.command_prefix = os.getenv('COMMAND_PREFIX')
+        super().__init__(command_prefix=self.command_prefix, intents=Intents.all())
+        
+    async def setup_hook(self):
+        for file in (_ for _ in os.listdir("./cogs") if _.endswith('py') and not _.startswith('_')):
+            print(file)
+            await self.load_extension(f"cogs.{file.split('.')[0]}")
 
-@bot.command()
-async def hello(ctx):
-    await ctx.send('')
-
-bot.run(os.getenv('DISCORD_TOKEN'))
-
+client = MyBot()
+asyncio.run(client.start(os.getenv('DISCORD_TOKEN')))
