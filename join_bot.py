@@ -3,6 +3,8 @@
 import discord
 import logging
 
+
+load_dotenv() #Load the .env
 token = 'your token'
 
 handler = logging.FileHandler(filename='discord.log',
