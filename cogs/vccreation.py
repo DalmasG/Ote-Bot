@@ -14,12 +14,12 @@ class VcCreation(Cog):
 	@Cog.listener()
 	async def on_voice_state_update(self, member: Member, before: VoiceState, after: VoiceState):
 		'''
-		The bot should be able to create VC's in the voice channel category.
-		If you are the admin of a VC, it will not let you make a new one.
-		However, this breaks if you do it fast enough.. TODO FIX THIS.
-		VcCreation uses a temp channels dictionary to do this.
-
-		Traveling from a dynamic VC to Open VC breaks it!
+		Implements Join-To-Create Functionality.
+		Creating a VC will make you its administrator.
+		You cannot create a new VC if you are an admin.
+		Admins are stored via the temp_channels dictionary.
+		You will be transported back to your VC if you try
+		to make a new one.
 		'''
 
 		if vc_after := after.channel:
