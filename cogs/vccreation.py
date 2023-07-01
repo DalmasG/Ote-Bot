@@ -18,10 +18,12 @@ class VcCreation(Cog):
 		If you are the admin of a VC, it will not let you make a new one.
 		However, this breaks if you do it fast enough.. TODO FIX THIS.
 		VcCreation uses a temp channels dictionary to do this.
+
+		Traveling from a dynamic VC to Open VC breaks it!
 		'''
 
 		if vc_after := after.channel:
-			if vc_after.id == self.CREATOR_CHANNEL_ID:
+			if vc_after.id == self.CREATOR_CHANNEL_ID: #if you clicked join-to-create
 				if member.id not in self.temp_channels: #check if you already own a channel
 					voice_channel = await member.guild.create_voice_channel(
 						name=f"{member.display_name}'s VC", category=vc_after.category
@@ -31,11 +33,12 @@ class VcCreation(Cog):
 					await voice_channel.set_permissions(member, administrator=True)
 				await member.move_to(member.guild.get_channel(self.temp_channels[member.id]))
 
-		if vc_before := before.channel:
+		if vc_before := before.channel: #If you left a channel
 			if vc_before.id in self.temp_channels.values() and not vc_before.members:
+				#If this channel is in the temp_channels dict and has no members.
 				keys = [k for k, v in self.temp_channels.items() if v == vc_before.id]
 				await vc_before.delete()
-				self.temp_channels.pop(keys)
+				self.temp_channels.pop(keys[0]) #Pop doesn't do slices, index the first
 
 
 	#Created a testing command for the purposes of debugging
